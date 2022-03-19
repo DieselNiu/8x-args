@@ -1,5 +1,6 @@
 package com.dieselniu;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,6 +27,7 @@ public class ArgsTest {
 	// TODO-10 -int : 0
 
 	@Test
+	@Disabled
 	public void should() {
 		Options options = Args.parse(Options.class, "-l -p:8080,-d:/usr/local");
 		assertThat(options.port()).isEqualTo(8080);
@@ -39,8 +41,9 @@ public class ArgsTest {
 
 	// -g this is a list -d 1 2 -3 5
 	@Test
+	@Disabled
 	public void should2() {
-		ListOptions listOptions = Args.parsr(Options.class, "-g", "this", "is", "a", "list", "-d", "1", "2", "-3", "5");
+		ListOptions listOptions = Args.parse(ListOptions.class, "-g", "this", "is", "a", "list", "-d", "1", "2", "-3", "5");
 		String[] group = listOptions.group();
 		assertThat(new String[]{"this", "is", "a", "list"}).isEqualTo(group);
 		assertThat(new int[]{1, 2, -3, 5}).isEqualTo(listOptions.decimals());
