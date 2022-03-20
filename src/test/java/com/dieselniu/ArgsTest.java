@@ -38,7 +38,18 @@ public class ArgsTest {
 	static record IntOption(@Option("p") int port) {
 
 	}
+
 	//  TODO-3  String -d /usr/local
+	static record StringOption(@Option("d") String directory) {
+
+	}
+
+	@Test
+	public void should_get_string_as_option_value() {
+		StringOption stringOption = Args.parse(StringOption.class, "-d", "/usr/local");
+		assertThat(stringOption.directory()).isEqualTo("/usr/local");
+	}
+
 
 	// multiple option: TODO-4 	-l -p 8080 -d /usr/local
 
