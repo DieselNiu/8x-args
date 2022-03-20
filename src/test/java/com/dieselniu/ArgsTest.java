@@ -11,6 +11,22 @@ public class ArgsTest {
 
 	// single option
 	//  TODO-1  boolean -l
+
+	@Test
+	public void should_set_boolean_option_to_true_if_flag_present() {
+		BooleanOption booleanOption = Args.parse(BooleanOption.class, "-l");
+		assertThat(booleanOption.logging()).isEqualTo(Boolean.TRUE);
+	}
+
+	@Test
+	public void should_set_boolean_option_to_false_if_flag_not_present() {
+		BooleanOption booleanOption = Args.parse(BooleanOption.class);
+		assertThat(booleanOption.logging()).isEqualTo(Boolean.FALSE);
+	}
+
+	static record BooleanOption(@Option("l") boolean logging) {
+
+	}
 	//  TODO-2  int -p 8080
 	//  TODO-3  String -d /usr/local
 
