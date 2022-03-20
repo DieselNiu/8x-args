@@ -53,27 +53,27 @@ public class ArgsTest {
 
 	// multiple option: TODO-4 	-l -p 8080 -d /usr/local
 
-	// sad path:
-	// TODO-5 boolean: -l t ; -l t f
-	// TODO-6 int : -p / -p 8080
-	// TODO-7 string : -d /usr/logs /usr/xxx
-
-	// default value
-	// TODO-8 -bool : false
-	// TODO-9 -string : "
-	// TODO-10 -int : 0
-
 	@Test
-	@Disabled
-	public void should() {
-		Options options = Args.parse(Options.class, "-l -p:8080,-d:/usr/local");
+	public void should_parse_multiple_option() {
+		MultiOptions options = Args.parse(MultiOptions.class, "-l", "-p", "8080", "-d", "/usr/local");
 		assertThat(options.port()).isEqualTo(8080);
 		assertThat(options.logging()).isEqualTo(Boolean.TRUE);
 		assertThat(options.directory()).isEqualTo("/usr/local");
 	}
 
-	static record Options(@Option("l") boolean logging, @Option("p") int port, @Option("d") String directory) {
+	static record MultiOptions(@Option("l") boolean logging, @Option("p") int port, @Option("d") String directory) {
 	}
+	// sad path:
+	// TODO-5 boolean: -l t ; -l t f
+
+	// TODO-6 int : -p / -p 8080
+	// TODO-7 string : -d /usr/logs /usr/xxx
+	// default value
+	// TODO-8 -bool : false
+
+	// TODO-9 -string : "
+
+	// TODO-10 -int : 0
 
 
 	// -g this is a list -d 1 2 -3 5
