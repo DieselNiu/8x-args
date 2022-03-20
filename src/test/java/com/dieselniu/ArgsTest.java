@@ -28,6 +28,16 @@ public class ArgsTest {
 
 	}
 	//  TODO-2  int -p 8080
+
+	@Test
+	public void should_parse_int_as_option_value() {
+		IntOption intOption = Args.parse(IntOption.class, "-p", "8080");
+		assertThat(intOption.port()).isEqualTo(8080);
+	}
+
+	static record IntOption(@Option("p") int port) {
+
+	}
 	//  TODO-3  String -d /usr/local
 
 	// multiple option: TODO-4 	-l -p 8080 -d /usr/local
