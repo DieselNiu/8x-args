@@ -5,7 +5,7 @@ plugins {
 group 'org.codingdojo.kata'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 16
 
 repositories {
     mavenCentral()
@@ -24,3 +24,4 @@ test() {
 wrapper {
     gradleVersion = '6.0.1'
 }
+targetCompatibility = JavaVersion.VERSION_16
