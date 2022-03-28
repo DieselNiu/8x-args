@@ -1,6 +1,8 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ArgsTest {
 
@@ -16,6 +18,15 @@ public class ArgsTest {
 	}
 
 	static record MultiOptions(@Option("l") boolean logging, @Option("p") int port, @Option("d") String directory) {}
+
+	@Test
+	public void should_throw_illegal_option_if_annotation_not_present() {
+		IllegalOptionException exception = Assertions.assertThrows(IllegalOptionException.class, () -> Args.parse(OptionWithoutAnnotation.class, "-l", "-p", "8080", "-d", "usr/local"));
+		assertEquals("port", exception.getParameter());
+	}
+
+	static record OptionWithoutAnnotation(@Option("l") boolean logging, int port, @Option("d") String directory) {}
+
 	// side path
 	// TODO boolean -l x
 
