@@ -1,4 +1,3 @@
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Annotation;
@@ -34,7 +33,7 @@ public class BooleanOptionParserTest {
 	}
 
 
-	static Option option(String value) {
+	public static Option option(String value) {
 		return new Option() {
 
 			@Override
