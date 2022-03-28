@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -17,5 +18,11 @@ class CanaryTest {
         List<Integer> numbers = newArrayList(1, 2, 3, 4, 5);
         List<Integer> doubled = numbers.stream().map(x -> x * 2).collect(toList());
         assertThat(doubled).isEqualTo(newArrayList(2, 4, 6, 8, 10));
+    }
+    @Test
+    public void should_(){
+        String s = String.valueOf(Instant.MAX);
+        System.out.println(s);
+
     }
 }
