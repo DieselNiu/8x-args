@@ -3,11 +3,11 @@ package com.github.dieselniu;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ArgsTest {
 	// Single Option:
-	//TODO -Bool -l
 	@Test
 	public void should_set_boolean_option_to_true_when_flag_present() {
 		BooleanOption booleanOption = Args.parse(BooleanOption.class, "-l");
@@ -20,9 +20,25 @@ public class ArgsTest {
 		assertFalse(booleanOption.logging());
 	}
 
-	record BooleanOption(@Option("l") Boolean logging) {}
-	//TODO -Integer -p 8080
-	//TODO -String -d /usr/log
+	record BooleanOption(@Option("l") boolean logging) {}
+
+	@Test
+	public void should_parse_int_as_option_value() {
+		IntOption intOption = Args.parse(IntOption.class, "-p", "8080");
+		assertEquals(8080, intOption.port());
+	}
+
+	record IntOption(@Option("p") int port) {}
+
+	@Test
+	public void should_get_string_as_option_value() {
+		StringOption stringOption = Args.parse(StringOption.class, "-d", "/usr/log");
+		assertThat(stringOption.logging()).isEqualTo("/usr/log");
+	}
+
+	record StringOption(@Option("d") String logging) {}
+
+
 	//Multi Options
 	//TODO  -l -p 8080 -d /usr/log
 	//Sad Path
