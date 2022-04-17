@@ -1,7 +1,6 @@
 package com.github.dieselniu;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.List;
@@ -20,22 +19,53 @@ public class Args {
 	}
 
 	private static Object parseOption(List<String> arguments, Parameter parameter) {
-		Option option = parameter.getDeclaredAnnotation(Option.class);
-		Object value = null;
-
-		if (parameter.getType() == boolean.class) {
-			value = arguments.contains("-" + option.value());
-		}
-
-		if (parameter.getType() == int.class) {
-			int index = arguments.indexOf("-" + option.value());
-			value = Integer.parseInt(arguments.get(index + 1));
-		}
-
-		if (parameter.getType() == String.class) {
-			int index = arguments.indexOf("-" + option.value());
-			value = arguments.get(index + 1);
-		}
-		return value;
+		return getOptionParser(parameter.getType()).parse(arguments, parameter.getDeclaredAnnotation(Option.class));
 	}
+
+	private static OptionParser getOptionParser(Class<?> type) {
+		OptionParser parser = null;
+		if (type == boolean.class) {
+			parser = new BooleanParser();
+		}
+
+		if (type == int.class) {
+			parser = new IntOptionParser();
+		}
+
+		if (type == String.class) {
+			parser = new StringOptionParser();
+		}
+		return parser;
+	}
+
+	interface OptionParser {
+		Object parse(List<String> arguments, Option option);
+	}
+
+	static class BooleanParser implements OptionParser {
+		@Override
+		public Object parse(List<String> arguments, Option option) {
+			return arguments.contains("-" + option.value());
+		}
+	}
+
+
+	static class StringOptionParser implements OptionParser {
+
+		@Override
+		public Object parse(List<String> arguments, Option option) {
+			int index = arguments.indexOf("-" + option.value());
+			return arguments.get(index + 1);
+		}
+	}
+
+	static class IntOptionParser implements OptionParser {
+
+		@Override
+		public Object parse(List<String> arguments, Option option) {
+			int index = arguments.indexOf("-" + option.value());
+			return Integer.parseInt(arguments.get(index + 1));
+		}
+	}
+
 }
