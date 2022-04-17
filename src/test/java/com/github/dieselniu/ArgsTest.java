@@ -41,6 +41,17 @@ public class ArgsTest {
 
 	//Multi Options
 	//TODO  -l -p 8080 -d /usr/log
+	@Test
+	public void should_example_1() {
+		MultiOptions multiOptions = Args.parse(MultiOptions.class, "-l", "-p", "8080", "-d", "/usr/log");
+		assertTrue(multiOptions.logging);
+		assertEquals(8080, multiOptions.port());
+		assertEquals("/usr/log", multiOptions.directory());
+	}
+
+	record MultiOptions(@Option("l") boolean logging, @Option("p") int port, @Option("d") String directory) {
+
+	}
 	//Sad Path
 	//TODO -Bool -l tf
 	//TODO -Integer -p
@@ -53,24 +64,12 @@ public class ArgsTest {
 
 	@Test
 	@Disabled
-	public void should_example_1() {
-		Options options = Args.parse(Options.class, "-l", "-p", "8080", "-d", "/usr/log");
-		assertTrue(options.logging);
-		assertEquals(8080, options.port());
-		assertEquals("/usr/log", options.directory());
-	}
-
-	@Test
-	@Disabled
 	public void should_example_2() {
 		ListOptions listOptions = Args.parse(ListOptions.class, "-g", "this", "is", "a", "list", "-d", "1", "2", "-3", "5");
 		assertArrayEquals(new String[]{"this", "is", "a", "list"}, listOptions.group());
 		assertArrayEquals(new int[]{1, 2, -3, 5}, listOptions.decimals());
 	}
 
-	static record Options(@Option("l") boolean logging, @Option("p") int port, @Option("d") String directory) {
-
-	}
 
 	static record ListOptions(String[] group, int[] decimals) {
 	}
