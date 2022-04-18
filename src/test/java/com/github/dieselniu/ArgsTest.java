@@ -16,7 +16,7 @@ public class ArgsTest {
 
 	@Test
 	public void should_set_boolean_option_to_false_when_flag_not_present() {
-		BooleanOption booleanOption = Args.parse(BooleanOption.class, "");
+		BooleanOption booleanOption = Args.parse(BooleanOption.class);
 		assertFalse(booleanOption.logging());
 	}
 
