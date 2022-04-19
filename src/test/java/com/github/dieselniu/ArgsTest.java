@@ -7,36 +7,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ArgsTest {
-	// Single Option:
-	@Test
-	public void should_set_boolean_option_to_true_when_flag_present() {
-		BooleanOption booleanOption = Args.parse(BooleanOption.class, "-l");
-		assertTrue(booleanOption.logging());
-	}
-
-	@Test
-	public void should_set_boolean_option_to_false_when_flag_not_present() {
-		BooleanOption booleanOption = Args.parse(BooleanOption.class);
-		assertFalse(booleanOption.logging());
-	}
-
-	record BooleanOption(@Option("l") boolean logging) {}
-
-	@Test
-	public void should_parse_int_as_option_value() {
-		IntOption intOption = Args.parse(IntOption.class, "-p", "8080");
-		assertEquals(8080, intOption.port());
-	}
-
-	record IntOption(@Option("p") int port) {}
-
-	@Test
-	public void should_get_string_as_option_value() {
-		StringOption stringOption = Args.parse(StringOption.class, "-d", "/usr/log");
-		assertThat(stringOption.logging()).isEqualTo("/usr/log");
-	}
-
-	record StringOption(@Option("d") String logging) {}
 
 
 	//Multi Options
