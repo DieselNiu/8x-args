@@ -1,5 +1,9 @@
 package com.github.dieselniu;
 
+import com.github.dieselniu.exception.IllegalOptionException;
+import com.github.dieselniu.exception.IllegalValueException;
+import com.github.dieselniu.exception.InSufficientException;
+import com.github.dieselniu.exception.TooManyArgumentsException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,11 +14,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.github.dieselniu.BooleanOptionParserTest.BooleanOptionParser.option;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BooleanOptionParserTest {
+public class OptionParserTest {
 	@Nested
 	class BooleanOptionParser {
 		@Test // Happy Path
@@ -52,7 +55,7 @@ public class BooleanOptionParserTest {
 	}
 
 	@Nested
-	class SingleValuedOptionParser {
+	class UnaryOptionParser {
 		@Test // Sad Path
 		public void should_not_accept_extra_argument_for_single_valued_option() {
 			TooManyArgumentsException e = assertThrows(TooManyArgumentsException.class, () -> OptionParsers.unary(0, Integer::parseInt).parse(Arrays.asList("-p", "8080", "8081"), option("p")));
@@ -80,6 +83,60 @@ public class BooleanOptionParserTest {
 			Object whatever = new Object();
 			assertSame(parsed, OptionParsers.unary(whatever, parse).parse(Arrays.asList("-p", "8080"), option("p")));
 		}
+
 	}
 
+
+	@Nested
+	class ListOptionParser {
+		// TODO: -g this is a list -d 1 2 -3 5
+		//TODO: -g  "this" "is"
+		//TODO: default value []
+		//TODO: -d throw exception
+
+		@Test
+		public void should_parse_list_value() {
+			assertArrayEquals(new String[]{"this", "is"}, OptionParsers.list(String[]::new, String::valueOf).parse(Arrays.asList("-g", "this", "is"), option("g")));
+		}
+
+		@Test
+		public void should_use_empty_array_as_default_value() {
+			String[] value = OptionParsers.list(String[]::new, String::valueOf).parse(Arrays.asList(), option("g"));
+			assertEquals(0, value.length);
+		}
+
+		@Test
+		public void should_throw_exception_if_value_parser_cant_parse_value() {
+			Function<String, String> parser = (it) -> {
+				throw new RuntimeException();
+			};
+
+			IllegalValueException illegalOptionException = assertThrows(IllegalValueException.class, () ->
+				OptionParsers.list(String[]::new, parser).parse(Arrays.asList("-g", "this", "is"), option("g")));
+			assertEquals("g", illegalOptionException.getParameter());
+		}
+
+
+		@Test
+		public void should_not_treat_negative_int_as_flag() {
+			assertArrayEquals(new Integer[]{-1, -2}, OptionParsers.list(Integer[]::new, Integer::parseInt).parse(Arrays.asList("-g", "-1", "-2"), option("g")));
+		}
+
+
+	}
+
+	static Option option(String value) {
+		return new Option() {
+
+			@Override
+			public Class<? extends Annotation> annotationType() {
+				return Option.class;
+			}
+
+			@Override
+			public String value() {
+				return value;
+			}
+		};
+	}
 }

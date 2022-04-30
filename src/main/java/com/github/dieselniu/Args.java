@@ -1,5 +1,8 @@
 package com.github.dieselniu;
 
+import com.github.dieselniu.exception.IllegalOptionException;
+import com.github.dieselniu.exception.UnsupportedOptionTypeException;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
@@ -24,6 +27,9 @@ public class Args {
 
 	private static Object parseOption(List<String> arguments, Parameter parameter) {
 		if (!parameter.isAnnotationPresent(Option.class)) throw new IllegalOptionException(parameter.getName());
+		Option option = parameter.getAnnotation(Option.class);
+		if (!PARSERS.containsKey(parameter.getType()))
+			throw new UnsupportedOptionTypeException(option.value(), parameter.getType());
 		return PARSERS.get(parameter.getType()).parse(arguments, parameter.getDeclaredAnnotation(Option.class));
 	}
 
@@ -31,7 +37,10 @@ public class Args {
 	private static Map<Class<?>, OptionParser> PARSERS = Map.of(
 		boolean.class, OptionParsers.bool(),
 		int.class, OptionParsers.unary(0, Integer::parseInt),
-		String.class, OptionParsers.unary("", Function.identity()));
+		String.class, OptionParsers.unary("", Function.identity()),
+		String[].class, OptionParsers.list(String[]::new, String::valueOf),
+		Integer[].class, OptionParsers.list(Integer[]::new, Integer::parseInt)
+	);
 
 
 }

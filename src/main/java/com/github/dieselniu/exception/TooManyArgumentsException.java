@@ -1,4 +1,4 @@
-package com.github.dieselniu;
+package com.github.dieselniu.exception;
 
 public class TooManyArgumentsException extends RuntimeException {
 	private String value;

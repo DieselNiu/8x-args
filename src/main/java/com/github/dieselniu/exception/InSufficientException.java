@@ -1,4 +1,4 @@
-package com.github.dieselniu;
+package com.github.dieselniu.exception;
 
 public class InSufficientException extends RuntimeException {
 	private final String value;
