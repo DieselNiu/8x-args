@@ -22,6 +22,16 @@ public class ArgsTest {
 	}
 
 	//TODO -int -p 8080\
+	@Test
+	public void should_parse_int_as_option_value() {
+		IntOption intOption = Args.parse(IntOption.class, "-p", "8080");
+		assertEquals(8080, intOption.port());
+	}
+
+	record IntOption(@Option("p") int port) {
+
+	}
+
 	//TODO -string -d /usr/log
 	//Multi Options
 	//TODO -l -p 8080 -d /usr/log
