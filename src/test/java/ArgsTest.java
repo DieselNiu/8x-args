@@ -31,18 +31,27 @@ public class ArgsTest {
 
 	}
 
-	//TODO -string -d /usr/log
 	@Test
-	public void should_get_string_as_option_value(){
+	public void should_get_string_as_option_value() {
 		StringOption stringOption = Args.parse(StringOption.class, "-d", "/usr/log");
-		assertEquals("/usr/log",stringOption.directory());
+		assertEquals("/usr/log", stringOption.directory());
 	}
-	record StringOption(@Option("d")String directory) {
+
+	record StringOption(@Option("d") String directory) {
 
 	}
 
 	//Multi Options
 	//TODO -l -p 8080 -d /usr/log
+	@Test
+	public void should_parse_multi_options() {
+		Options options = Args.parse(Options.class, "-l", "-p", "8080", "-d", "/usr/log");
+		assertTrue(options.logging());
+		assertEquals(8080, options.port());
+		assertEquals("/usr/log", options.directory());
+	}
+
+
 	//Sad Path
 	//-bool -l /
 	//-int  -p 8080 8081
@@ -52,14 +61,6 @@ public class ArgsTest {
 	// -int 0
 	// -string ""
 
-	@Test
-	@Disabled
-	public void should_() {
-		Options options = Args.parse(Options.class, "-l", "-p", "8080", "-d", "/usr/log");
-		assertTrue(options.logging());
-		assertEquals(8080, options.port());
-		assertEquals("/usr/log", options.directory());
-	}
 
 	@Test
 	@Disabled

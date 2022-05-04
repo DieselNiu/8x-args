@@ -9,23 +9,27 @@ public class Args {
 		try {
 			List<String> arguments = Arrays.asList(args);
 			Constructor<?> constructor = optionsClass.getDeclaredConstructors()[0];
-			Parameter parameter = constructor.getParameters()[0];
-			Option option = parameter.getDeclaredAnnotation(Option.class);
-			Object value = null;
-			if (parameter.getType() == boolean.class) {
-				value = arguments.contains("-" + option.value());
-			}
-			if (parameter.getType() == int.class) {
-				int index = arguments.indexOf("-" + option.value());
-				value = Integer.parseInt(arguments.get(index + 1));
-			}
-			if (parameter.getType() == String.class) {
-				int index = arguments.indexOf("-" + option.value());
-				value = arguments.get(index + 1);
-			}
-			return (T) constructor.newInstance(value);
+			Object[] values = Arrays.stream(constructor.getParameters()).map(it -> parseValue(arguments, it)).toArray();
+			return (T) constructor.newInstance(values);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	private static Object parseValue(List<String> arguments, Parameter parameter) {
+		Option option = parameter.getDeclaredAnnotation(Option.class);
+		Object value = null;
+		if (parameter.getType() == boolean.class) {
+			value = arguments.contains("-" + option.value());
+		}
+		if (parameter.getType() == int.class) {
+			int index = arguments.indexOf("-" + option.value());
+			value = Integer.parseInt(arguments.get(index + 1));
+		}
+		if (parameter.getType() == String.class) {
+			int index = arguments.indexOf("-" + option.value());
+			value = arguments.get(index + 1);
+		}
+		return value;
 	}
 }
