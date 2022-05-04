@@ -1,5 +1,5 @@
 public class Args {
-	public static <T> T parse(Class<T> optionClass, String... args) {
+	public static <T> T parse(Class<T> optionsClass, String... args) {
 		return null;
 	}
 }
