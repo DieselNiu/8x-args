@@ -17,7 +17,7 @@ public class Args {
 	}
 
 	private static Object parseValue(List<String> arguments, Parameter parameter) {
-		return getOptionParser(parameter.getType()).parse(arguments, parameter.getDeclaredAnnotation(Option.class));
+		return PARSER.get(parameter.getType()).parse(arguments, parameter.getDeclaredAnnotation(Option.class));
 	}
 
 
