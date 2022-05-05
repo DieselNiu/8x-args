@@ -1,8 +1,8 @@
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class Args {
 	public static <T> T parse(Class<T> optionsClass, String... args) {
@@ -17,19 +17,14 @@ public class Args {
 	}
 
 	private static Object parseValue(List<String> arguments, Parameter parameter) {
-		Option option = parameter.getDeclaredAnnotation(Option.class);
-		Object value = null;
-		if (parameter.getType() == boolean.class) {
-			value = arguments.contains("-" + option.value());
-		}
-		if (parameter.getType() == int.class) {
-			int index = arguments.indexOf("-" + option.value());
-			value = Integer.parseInt(arguments.get(index + 1));
-		}
-		if (parameter.getType() == String.class) {
-			int index = arguments.indexOf("-" + option.value());
-			value = arguments.get(index + 1);
-		}
-		return value;
+		return getOptionParser(parameter.getType()).parse(arguments, parameter.getDeclaredAnnotation(Option.class));
 	}
+
+
+	private static Map<Class<?>, OptionParser> PARSER = Map.of(boolean.class, new BoolParser(), int.class, new SingleValuedParser(Integer::parseInt), String.class, new SingleValuedParser(String::valueOf));
+
+	private static OptionParser getOptionParser(Class<?> type) {
+		return PARSER.get(type);
+	}
+
 }
