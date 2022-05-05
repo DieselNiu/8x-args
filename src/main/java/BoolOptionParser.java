@@ -1,6 +1,6 @@
 import java.util.List;
 
-class BoolParser implements OptionParser {
+class BoolOptionParser implements OptionParser {
 
 	@Override
 	public Object parse(List<String> arguments, Option option) {
