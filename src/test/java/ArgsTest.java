@@ -4,22 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ArgsTest {
-	//Single Option
-	@Test
-	public void should_set_bool_to_true_if_flag_present() {
-		boolOption boolOption = Args.parse(boolOption.class, "-l");
-		assertTrue(boolOption.logging());
-	}
 
-	@Test
-	public void should_set_bool_to_false_if_flag_not_present() {
-		boolOption boolOption = Args.parse(boolOption.class);
-		assertFalse(boolOption.logging());
-	}
-
-	record boolOption(@Option("l") boolean logging) {
-
-	}
 
 	@Test
 	public void should_parse_int_as_option_value() {

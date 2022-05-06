@@ -1,7 +1,7 @@
 import java.util.List;
 import java.util.function.Function;
 
-class SingleValuedOptionParser<T> implements OptionParser {
+class SingleValuedOptionParser<T> implements OptionParser<T> {
 	Function<String, T> valueParser;
 
 	public SingleValuedOptionParser(Function<String, T> valueParser) {
