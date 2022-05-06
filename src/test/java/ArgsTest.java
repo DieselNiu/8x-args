@@ -6,26 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ArgsTest {
 
 
-	@Test
-	public void should_parse_int_as_option_value() {
-		IntOption intOption = Args.parse(IntOption.class, "-p", "8080");
-		assertEquals(8080, intOption.port());
-	}
-
-	record IntOption(@Option("p") int port) {
-
-	}
-
-	@Test
-	public void should_get_string_as_option_value() {
-		StringOption stringOption = Args.parse(StringOption.class, "-d", "/usr/log");
-		assertEquals("/usr/log", stringOption.directory());
-	}
-
-	record StringOption(@Option("d") String directory) {
-
-	}
-
 	//Multi Options
 	//TODO -l -p 8080 -d /usr/log
 	@Test
@@ -36,15 +16,6 @@ public class ArgsTest {
 		assertEquals("/usr/log", options.directory());
 	}
 
-
-	//Sad Path
-	//-bool -l /
-	//-int  -p 8080 8081
-	//-string -d /usr/log /usr/xxx
-	//Default value
-	// -bool false
-	// -int 0
-	// -string ""
 
 
 	@Test

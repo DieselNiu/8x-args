@@ -10,13 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BoolOptionParserTest {
 
-	//Sad Path
-	//-int  -p 8080 8081
-	//-string -d /usr/log /usr/xxx
-	//Default value
-	// -bool false
-	// -int 0
-	// -string ""
 
 	@Test //sad path
 	public void should_not_accept_extra_argument_for_bool_option() {
