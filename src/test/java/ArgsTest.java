@@ -1,3 +1,5 @@
+import exception.IllegalOptionException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +18,17 @@ public class ArgsTest {
 		assertEquals("/usr/log", options.directory());
 	}
 
+
+	@Test
+	public void should_throw_illegal_option_if_option_not_found() {
+		IllegalOptionException e = Assertions.assertThrows(IllegalOptionException.class,
+			() -> Args.parse(OptionsWithOutAnnotation.class, "-l", "-p", "8080", "-d", "/usr/log"));
+		assertEquals("port", e.getParameter());
+	}
+
+	record OptionsWithOutAnnotation(@Option("l") boolean logging, int port, @Option("d") String directory) {
+
+	}
 
 
 	@Test

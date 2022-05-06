@@ -12,14 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class SingleValuedParserTest {
-	//Sad Path
-	//-string -d /usr/log /usr/xxx
-	//Default value
-	// -bool false
-	// -int 0
-	// -string ""
-
-
 	@Test // sad path
 	public void should_not_accept_extra_argument_for_single_valued_parser() {
 		TooManyArgumentException e = Assertions.assertThrows(TooManyArgumentException.class,
