@@ -20,6 +20,7 @@ public class Args {
 		}
 	}
 
+
 	private static Object parseValue(List<String> arguments, Parameter parameter) {
 		if (!parameter.isAnnotationPresent(Option.class)) throw new IllegalOptionException(parameter.getName());
 		return PARSER.get(parameter.getType()).parse(arguments, parameter.getDeclaredAnnotation(Option.class));
@@ -28,7 +29,10 @@ public class Args {
 
 	private static Map<Class<?>, OptionParser> PARSER = Map.of(boolean.class, OptionParsers.bool(), int.class,
 		OptionParsers.unary(0, Integer::parseInt),
-		String.class, OptionParsers.unary("", String::valueOf));
+		String.class, OptionParsers.unary("", String::valueOf),
+		String[].class, OptionParsers.list(String[]::new, String::valueOf),
+		Integer[].class, OptionParsers.list(Integer[]::new, Integer::parseInt)
+	);
 
 
 }

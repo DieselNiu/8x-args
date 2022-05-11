@@ -32,18 +32,17 @@ public class ArgsTest {
 
 
 	@Test
-	@Disabled
 	public void should_1() {
 		ListOptions listOptions = Args.parse(ListOptions.class, "-g", "this", "is", "a", "list", "-d", "1", "2", "-3", "5");
 		assertArrayEquals(listOptions.groups(), new String[]{"this", "is", "a", "list"});
-		assertArrayEquals(listOptions.decimals(), new int[]{1, 2, -3, 5});
+		assertArrayEquals(listOptions.decimals(), new Integer[]{1, 2, -3, 5});
 	}
 
 	record Options(@Option("l") boolean logging, @Option("p") int port, @Option("d") String directory) {
 
 	}
 
-	record ListOptions(@Option("g") String[] groups, @Option("d") int[] decimals) {
+	record ListOptions(@Option("g") String[] groups, @Option("d") Integer[] decimals) {
 
 	}
 }

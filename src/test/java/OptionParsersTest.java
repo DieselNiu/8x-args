@@ -1,3 +1,4 @@
+import exception.IllegalValueException;
 import exception.InSufficientException;
 import exception.TooManyArgumentException;
 import org.junit.jupiter.api.Assertions;
@@ -86,6 +87,38 @@ public class OptionParsersTest {
 					return argument;
 				}
 			};
+		}
+	}
+
+	@Nested
+	class ListOptionParser {
+		@Test
+		public void should_parse_list_option() {
+			String[] values = OptionParsers.list(String[]::new, String::valueOf).parse(Arrays.asList("-g", "this", "is"), BoolOptionParser.option("g"));
+			assertArrayEquals(new String[]{"this", "is"}, values);
+		}
+
+		@Test
+		public void should_set_empty_array_as_default_value() {
+			String[] values = OptionParsers.list(String[]::new, String::valueOf).parse(Arrays.asList(), BoolOptionParser.option("g"));
+			assertEquals(0, values.length);
+		}
+
+		@Test
+		public void should_throw_exception_if_value_parser_cant_parse_value() {
+			Function<String, String> parse = (it) -> {
+				throw new RuntimeException();
+			};
+			IllegalValueException exception = Assertions.assertThrows(IllegalValueException.class, () -> OptionParsers.list(String[]::new, parse).parse(Arrays.asList("-g", "this", "is"), BoolOptionParser.option("g")));
+			assertEquals("g", exception.getOption());
+			assertEquals("this", exception.getValue());
+		}
+
+
+		@Test
+		public void should_not_treat_negative_value_as_flag() {
+			Integer[] values = OptionParsers.list(Integer[]::new, Integer::parseInt).parse(Arrays.asList("-g", "-1", "-2"), BoolOptionParser.option("g"));
+			assertArrayEquals(new Integer[]{-1, -2}, values);
 		}
 	}
 
