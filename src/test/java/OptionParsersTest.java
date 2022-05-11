@@ -22,7 +22,7 @@ public class OptionParsersTest {
 		@Test // sad path
 		public void should_not_accept_extra_argument_for_single_valued_parser() {
 			TooManyArgumentException e = Assertions.assertThrows(TooManyArgumentException.class,
-				() -> SingleValuedOptionParser.unary(0, Integer::parseInt).parse(Arrays.asList("-p", "8080", "8081"), BoolOptionParser.option("p")));
+				() -> OptionParsers.unary(0, Integer::parseInt).parse(Arrays.asList("-p", "8080", "8081"), BoolOptionParser.option("p")));
 			assertEquals("p", e.getOption());
 		}
 
@@ -31,7 +31,7 @@ public class OptionParsersTest {
 		@ValueSource(strings = {"-p -l", "-p"})
 		public void should_not_accept_insufficient_argument_for_single_valued_parser(String value) {
 			InSufficientException e = Assertions.assertThrows(InSufficientException.class,
-				() -> SingleValuedOptionParser.unary(0, Integer::parseInt).parse(Arrays.asList(value.split(" ")), BoolOptionParser.option("p")));
+				() -> OptionParsers.unary(0, Integer::parseInt).parse(Arrays.asList(value.split(" ")), BoolOptionParser.option("p")));
 			assertEquals("p", e.getOption());
 		}
 
@@ -39,7 +39,7 @@ public class OptionParsersTest {
 		public void should_set_default_value_to_0_for_int_option() {
 			Object whatever = new Object();
 			Function<String, Object> parsed = (it) -> null;
-			assertSame(whatever, SingleValuedOptionParser.unary(whatever, parsed).parse(Arrays.asList(), BoolOptionParser.option("p")));
+			assertSame(whatever, OptionParsers.unary(whatever, parsed).parse(Arrays.asList(), BoolOptionParser.option("p")));
 		}
 
 		@Test // happy path
@@ -48,7 +48,7 @@ public class OptionParsersTest {
 			Object parsed = new Object();
 			Function<String, Object> parse = (it) -> parsed;
 
-			assertSame(parsed, SingleValuedOptionParser.unary(whatever, parse).parse(Arrays.asList("-p", "8080"), BoolOptionParser.option("p")));
+			assertSame(parsed, OptionParsers.unary(whatever, parse).parse(Arrays.asList("-p", "8080"), BoolOptionParser.option("p")));
 		}
 	}
 
@@ -59,18 +59,18 @@ public class OptionParsersTest {
 		@Test //sad path
 		public void should_not_accept_extra_argument_for_bool_option() {
 			TooManyArgumentException e = Assertions.assertThrows(TooManyArgumentException.class,
-				() -> SingleValuedOptionParser.bool().parse(Arrays.asList("-l", "/"), option("l")));
+				() -> OptionParsers.bool().parse(Arrays.asList("-l", "/"), option("l")));
 			assertEquals("l", e.getOption());
 		}
 
 		@Test // default value
 		public void should_set_bool_to_false_if_flag_not_present() {
-			assertFalse(SingleValuedOptionParser.bool().parse(List.of(), option("l")));
+			assertFalse(OptionParsers.bool().parse(List.of(), option("l")));
 		}
 
 		@Test // happy path
 		public void should_set_bool_to_true_if_flag_present() {
-			assertTrue(SingleValuedOptionParser.bool().parse(List.of("-l"), option("l")));
+			assertTrue(OptionParsers.bool().parse(List.of("-l"), option("l")));
 		}
 
 		static Option option(String argument) {
@@ -88,8 +88,6 @@ public class OptionParsersTest {
 			};
 		}
 	}
-
-
 
 
 }

@@ -1,11 +1,19 @@
 package exception;
 
 public class IllegalValueException extends RuntimeException {
-	private String optionValue;
+	private String option;
 	private String value;
 
-	public IllegalValueException(String optionValue, String value) {
-		this.optionValue = optionValue;
+	public IllegalValueException(String option, String value) {
+		this.option = option;
 		this.value = value;
+	}
+
+	public String getOption() {
+		return option;
+	}
+
+	public String getValue() {
+		return value;
 	}
 }

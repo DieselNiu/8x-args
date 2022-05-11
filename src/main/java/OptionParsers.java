@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
-class SingleValuedOptionParser {
+class OptionParsers {
 
 
 	public static OptionParser<Boolean> bool() {
